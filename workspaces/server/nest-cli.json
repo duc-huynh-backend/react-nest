@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "watchOptions": {
+    "excludeFiles": [
+      "src/public",
+      "tsconfig.json",
+      "tsconfig.build.json"
+    ]
+  }
+}

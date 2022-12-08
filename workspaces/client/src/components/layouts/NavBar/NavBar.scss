@@ -1,0 +1,48 @@
+#navbar-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 98%;
+  margin: auto;
+
+  .nav-item-container {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      text-decoration: none;
+    }
+
+    .project-logo-link {
+      #project-logo {
+        height: 2vw;
+      }
+    }
+
+    .logout-link {
+      margin-right: 0;
+      cursor: pointer;
+
+      .logout-text {
+        font-weight: bold;
+        margin-left: 10px;
+      }
+
+      .logout-icon {
+        width: 1.5vw;
+        height: 1.5vw;
+      }
+    }
+
+    .nav-item-text {
+      color: black;
+      font-size: 1vw;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "cache": false,
+      "outputMode": "full"
+    },
+    "build:watch": {
+      "cache": false,
+      "outputMode": "full"
+    },
+    "start:dev": {
+      "cache": false,
+      "dependsOn": ["build:watch"],
+      "outputMode": "full"
+    },
+    "start": {
+      "cache": true,
+      "outputMode": "full"
+    }
+  }
+}

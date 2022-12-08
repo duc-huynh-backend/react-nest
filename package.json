@@ -1,0 +1,46 @@
+{
+  "name": "nest-react-boilerplate",
+  "workspaces": [
+    "./workspaces/*"
+  ],
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "packageManager": "npm@6.14.17",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "turbo run build",
+    "build:client": "turbo run build --filter=client",
+    "build:server": "turbo run build --filter=server",
+    "prepare": "npm run build",
+    "dev": "turbo run start:dev --parallel",
+    "start:dev": "npm run dev",
+    "start:server": "turbo run start:dev --filter=server",
+    "client:build:watch": "turbo run build:watch --filter=client",
+    "clean:module": "sh ./scripts/clean.sh -d",
+    "clean:build": "sh ./scripts/clean.sh -b",
+    "clean:turbo": "sh ./scripts/clean.sh -t",
+    "clean:all": "sh ./scripts/clean.sh -a",
+    "clean:client": "sh ./scripts/clean.sh -c",
+    "clean:server": "sh ./scripts/clean.sh -s",
+    "lint:client": "eslint workspaces/client",
+    "lint:server": "eslint workspaces/server",
+    "predeploy": "turbo run build",
+    "postinstall": "npm run predeploy",
+    "start": "turbo run start"
+  },
+  "dependencies": {
+    "client": "file:workspaces/client",
+    "server": "file:workspaces/server"
+  },
+  "devDependencies": {
+    "turbo": "^1.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duc-coder/react-nest.git"
+  },
+  "author": "icd",
+  "license": "UNLICENSED"
+}

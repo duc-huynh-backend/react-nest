@@ -1,0 +1,100 @@
+.login-main {
+  background-color: #00684d;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+
+  .login-card {
+    margin: auto;
+    width: 45vw;
+    height: 25vw;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    .login-images {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f1f1f1;
+
+      #project_logo {
+        width: 75%;
+        height: fit-content;
+      }
+    }
+
+    .login-form {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .login-form-wrapper {
+        width: 100%;
+
+        .login-form-title {
+          font-size: 1.5vw;
+          font-weight: bold;
+        }
+
+        #formLogin {
+          .form-items {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .form-items-label {
+              width: 75%;
+              text-align: left;
+              margin-bottom: 5px;
+              font-size: 1vw;
+            }
+
+            .form-items-error-label {
+              width: 75%;
+              text-align: left;
+              font-size: 0.7vw;
+              color: #d43228;
+            }
+
+            .form-items-input {
+              width: 75%;
+              height: 2.2vw;
+              border: 1px solid #d4d4d4;
+              border-radius: 5px;
+              outline: none;
+
+              &:focus {
+                border-color: #00684d;
+                transition: 0.5s;
+              }
+            }
+          }
+
+          .btn-login {
+            width: 60%;
+            height: 2.5vw;
+            font-size: 1vw;
+            background-color: #00684d;
+            outline: none;
+            border: none;
+            color: white;
+            border: none;
+            border-radius: 1000px;
+            cursor: pointer;
+
+            &:hover {
+              opacity: 0.5;
+            }
+          }
+        }
+      }
+    }
+  }
+}

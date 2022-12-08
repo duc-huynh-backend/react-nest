@@ -1,0 +1,57 @@
+#pagination-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin: 20px 0;
+
+  .pagination-text {
+    margin-right: 10px;
+  }
+
+  #quantity-select {
+    padding: 5px 10px;
+    margin-right: 20px;
+  }
+
+  #page-transfer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .btn-container {
+      position: relative;
+
+      .page-transfer-btn {
+        margin: 0 10px;
+      }
+
+      .btn-cover {
+        width: 40%;
+        height: 40%;
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        z-index: 10;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background-color: transparent;
+
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .page-number {
+      width: 1.4vw;
+      height: 1.4vw;
+      line-height: 1.4vw;
+      background-color: #265d36;
+      color: white;
+      border-radius: 5px;
+      cursor: not-allowed;
+    }
+  }
+}
