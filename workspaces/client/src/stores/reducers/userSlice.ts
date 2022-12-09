@@ -4,7 +4,6 @@ import {
   IUserRegistrationForm,
   IUserListItemPayload,
   IUserDetailPayload,
-  DEFAULT_AUTHORITY_OPTION,
   DEFAULT_PAGE,
   DEFAULT_LIMIT_OPTION,
   MESSAGE_BOX_STATUS,
@@ -21,7 +20,7 @@ const initialState = {
   userDetail: {} as IUserDetailPayload,
   searchData: {
     user_name: '',
-    authority: DEFAULT_AUTHORITY_OPTION,
+    authority: '',
     page: DEFAULT_PAGE,
     limit: DEFAULT_LIMIT_OPTION,
   },
@@ -55,7 +54,7 @@ export const getUsers = createAsyncThunk(
         appActions.messageBoxDisplay({
           isMessageBoxOpen: true,
           text: error.response.data.message,
-          messageStatus: MESSAGE_BOX_STATUS.SUCCESS,
+          messageStatus: MESSAGE_BOX_STATUS.ERROR,
         }),
       );
       return thunkAPI.rejectWithValue(error.response.data);
@@ -103,6 +102,19 @@ export const deleteUser = createAsyncThunk(
   async (userId: number, thunkAPI) => {
     try {
       await userService.remove(userId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+) as any;
+
+export const checkEmail = createAsyncThunk(
+  'userSlice/checkEmail',
+  async (email: string, thunkAPI) => {
+    try {
+      const result = await userService.checkEmail(email);
+      const { isExist }: { isExist: boolean } = result.data;
+      return isExist;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

@@ -32,7 +32,7 @@ export class UsersController extends BaseController {
   }
 
   @Get('/:id')
-  async findUser(@Res() res, @Param('id') id) {
+  async findById(@Res() res, @Param('id') id) {
     try {
       const user = await this.userService.findUserById(id);
       return res.status(HttpStatus.OK).json(user);
@@ -42,7 +42,7 @@ export class UsersController extends BaseController {
   }
 
   @Get('/')
-  async findUsers(@Res() res, @Query() query: SearchDTO) {
+  async find(@Res() res, @Query() query: SearchDTO) {
     try {
       const { count, rows } = await this.userService.findUsers(query);
       return res.status(HttpStatus.OK).json({ users: rows, totalUsers: count });
@@ -51,9 +51,19 @@ export class UsersController extends BaseController {
     }
   }
 
+  @Get('/email/:email')
+  async checkEmail(@Res() res, @Param('email') email) {
+    try {
+      const result = await this.userService.findUserByEmail(email);
+      return res.status(HttpStatus.OK).json({ isExist: !!result });
+    } catch (error) {
+      return res.status(Number(error.response.statusCode)).json(error);
+    }
+  }
+
   @Post('/')
   @UseGuards(AuthGuard)
-  async createUser(@Body() body: CreateUserDto, @Req() req) {
+  async create(@Body() body: CreateUserDto, @Req() req) {
     const {
       authority, user_name, user_password, mail_address,
     } = body;
@@ -72,7 +82,7 @@ export class UsersController extends BaseController {
 
   @Put('/:id')
   @UseGuards(AuthGuard)
-  async updateUser(@Param('id') id, @Body() body: UpdateUserDto, @Req() req) {
+  async update(@Param('id') id, @Body() body: UpdateUserDto, @Req() req) {
     const {
       authority, user_name, user_password, mail_address,
     } = body;
@@ -91,7 +101,7 @@ export class UsersController extends BaseController {
 
   @Delete('/:id')
   @UseGuards(AuthGuard)
-  async deleteUser(@Param('id') id, @Req() req) {
+  async delete(@Param('id') id, @Req() req) {
     const { user: { userId: currentUserId } } = req;
 
     const isDeleted = await this.userService.updateUserById(id, { delete_flg: DELETE_FLG.YES }, currentUserId);

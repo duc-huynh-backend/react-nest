@@ -27,7 +27,7 @@ export function ListIndex(_props: any) {
   return (
     <div id='list-index-main'>
       <span id='quantity-item' className='index-text'>
-        {currentUserQuantity}件中
+        {totalUsers}件中
       </span>
       <span id='item-index' className='index-text'>
         {startIndex()}～{lastIndex()}

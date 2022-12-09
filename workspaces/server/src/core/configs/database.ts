@@ -16,8 +16,6 @@ import {
   NODE_ENV,
 } from './envs';
 
-export const isDebug = `${NODE_ENV}`.toUpperCase() === 'DEBUG';
-
 const gcpSqlSocketPath = GCP__SQL_SOCKET_PATH;
 const gcpSqlConnectionName = GCP__SQL_CONNECTION_NAME;
 
@@ -48,7 +46,6 @@ export const dbConfig: Options = {
   database: MYSQL__DATABASE,
   dialect: 'mysql',
   dialectOptions: { socketPath },
-  logging: isDebug ? console.log : false,
   pool,
   port: Number(MYSQL__PORT || 3306),
   replication,

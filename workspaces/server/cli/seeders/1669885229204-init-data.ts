@@ -1,4 +1,4 @@
-import { MODEL_NAME } from '@/src/utils/contants';
+import { MODEL_NAME } from './../../src/utils/contants';
 import { QueryInterface } from 'sequelize';
 import { users } from './data/users';
 

@@ -4,7 +4,8 @@ import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { Icon } from '@iconify/react';
-import { ACTIVE_SIDE_BAR, APP_URL, MINI_SIDE_BAR } from 'src/utils/constants';
+import { APP_URL } from 'src/utils/constants';
+import { sessionService } from 'src/services/sessionService';
 
 export const SIDEBAR_LIST = [
   {
@@ -28,53 +29,65 @@ export const FIRST_SIDEBAR_URL = SIDEBAR_LIST[0].url
   ? SIDEBAR_LIST[0].url
   : SIDEBAR_LIST[0].sub[0].url;
 
+const ITEM_ACTIVE_CLASS_NAME = 'sidebar-item-active';
+const SUB_ITEM_ACTIVE_CLASS_NAME = 'sidebar-sub-item-active';
+const MINI_SIDEBAR_CLASS_NAME = 'sidebar-mini';
+const ACTIVE_SIDEBAR = 'ACTIVE_SIDEBAR';
+
 export function Sidebar() {
-  const activeClassName = 'sidebar-item-active';
-
   const { pathname } = useLocation();
+  const [miniSideBar, setMiniSideBar] = useState('');
+  const [activeItem, setActiveItem] = useState('');
 
-  const [miniSideBarClassName, setMiniSideBar] = useState('');
-  const [activeSideBar, setActiveSideBar] = useState('');
-  const activeUrl = sessionStorage.getItem(ACTIVE_SIDE_BAR);
-  const miniSideBar = sessionStorage.getItem(MINI_SIDE_BAR);
+  const activeSidebar = sessionService.get(ACTIVE_SIDEBAR);
 
-  useEffect(() => {
-    if (activeUrl) setActiveSideBar(activeUrl);
-    if (miniSideBar) setMiniSideBar(miniSideBar);
-  }, [activeUrl, miniSideBar]);
+  // Remove session storage memory of active sidebar for the first time
+  useEffect(() => sessionService.remove(ACTIVE_SIDEBAR), []);
 
-  const activeSidebarItem = (url: string | null, element?: Element) => {
-    // Case click sidebar item -> Remove old active sidebar item state
-    if (element) setActiveSideBar('');
+  // Re-state active sidebar every click sidebar event
+  useEffect(() => setActiveItem(activeSidebar), [activeSidebar]);
 
-    if (url === pathname || (activeSideBar && activeSideBar === url)) {
-      sessionStorage.setItem(ACTIVE_SIDE_BAR, url);
-      return activeClassName;
-    } else {
-      return '';
-    }
+  const renderActiveSidebarItem = (
+    url: string | null,
+    itemName: string | null,
+    activeClassName: string,
+  ) => {
+    if (url === pathname || itemName === activeItem) return activeClassName;
+    return '';
+  };
+
+  const selectActiveSidebar = (itemName: string) =>
+    sessionService.set(ACTIVE_SIDEBAR, itemName);
+
+  const renderSidebarSubItems = (
+    subItemArr: Array<any>,
+    parentName: string,
+  ) => {
+    return subItemArr.map((subItem, subItemIndex) => {
+      return (
+        <li key={subItemIndex} className='sidebar-li'>
+          <Link
+            to={subItem.url}
+            className='sidebar-sub-item flex-center-start'
+            onClick={() => selectActiveSidebar(parentName)}
+          >
+            <p
+              className={`sidebar-item-text ${renderActiveSidebarItem(
+                subItem.url,
+                null,
+                SUB_ITEM_ACTIVE_CLASS_NAME,
+              )}`}
+            >
+              {subItem.name}
+            </p>
+            <div className='sidebar-item-active-click-mask'></div>
+          </Link>
+        </li>
+      );
+    });
   };
 
   const renderSidebarItems = () => {
-    const renderSidebarSubItems = (subItemArr: Array<any>) => {
-      return subItemArr.map((subItem, subItemIndex) => {
-        return (
-          <li key={subItemIndex} className='sidebar-li'>
-            <Link
-              to={subItem.url}
-              className={`sidebar-sub-item flex-center-start ${activeSidebarItem(
-                subItem.url,
-              )}`}
-              onClick={(e) => activeSidebarItem(null, e.currentTarget)}
-            >
-              <p className='sidebar-item-text'>{subItem.name}</p>
-              <div className='sidebar-item-active-click-mask'></div>
-            </Link>
-          </li>
-        );
-      });
-    };
-
     return SIDEBAR_LIST.map((item, itemIndex) => {
       return (
         <Fragment key={itemIndex}>
@@ -82,10 +95,12 @@ export function Sidebar() {
             {item.url ? (
               <Link
                 to={item.url}
-                className={`sidebar-item flex-center-start ${activeSidebarItem(
+                className={`sidebar-item flex-center-start ${renderActiveSidebarItem(
                   item.url,
+                  item.name,
+                  ITEM_ACTIVE_CLASS_NAME,
                 )}`}
-                onClick={(e) => activeSidebarItem(null, e.currentTarget)}
+                onClick={() => selectActiveSidebar(item.name)}
               >
                 <Icon
                   icon={item.icon}
@@ -96,7 +111,14 @@ export function Sidebar() {
                 <div className='sidebar-item-active-click-mask'></div>
               </Link>
             ) : (
-              <div role='menuitem' className='sidebar-item flex-center-start'>
+              <div
+                role='menuitem'
+                className={`sidebar-item flex-center-start ${renderActiveSidebarItem(
+                  item.url,
+                  item.name,
+                  ITEM_ACTIVE_CLASS_NAME,
+                )}`}
+              >
                 <Icon
                   icon={item.icon}
                   color='white'
@@ -105,22 +127,21 @@ export function Sidebar() {
                 <p className='sidebar-item-text'>{item.name}</p>
               </div>
             )}
+            {item.sub.length > 0 && (
+              <ul className='sidebar-list'>
+                {renderSidebarSubItems(item.sub, item.name)}
+              </ul>
+            )}
           </li>
-          {item.sub.length > 0 ? renderSidebarSubItems(item.sub) : <></>}
         </Fragment>
       );
     });
   };
 
   const handleMinimizeSideBar = () => {
-    const className = 'sidebar-mini';
-    if (miniSideBarClassName === '') {
-      setMiniSideBar(className);
-      sessionStorage.setItem(MINI_SIDE_BAR, className);
-    } else {
-      setMiniSideBar('');
-      sessionStorage.removeItem(MINI_SIDE_BAR);
-    }
+    miniSideBar === ''
+      ? setMiniSideBar(MINI_SIDEBAR_CLASS_NAME)
+      : setMiniSideBar('');
   };
 
   return (
@@ -133,8 +154,8 @@ export function Sidebar() {
           onClick={() => handleMinimizeSideBar()}
         />
       </div>
-      <div className={`sidebar ${miniSideBarClassName}`}>
-        <ul id='sidebar-list'>{renderSidebarItems()}</ul>
+      <div className={`sidebar ${miniSideBar}`}>
+        <ul className='sidebar-list'>{renderSidebarItems()}</ul>
       </div>
     </div>
   );

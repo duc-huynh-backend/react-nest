@@ -40,3 +40,4 @@ src/public/*
 
 scripts/keys/key.*
 
+cli/config/**/*.json

@@ -1,0 +1,8 @@
+runtime: nodejs16
+
+env_variables:
+  NODE_ENV: production
+
+  APP_URL: 
+  APP_BASE_URL: ''
+  APP_TIMEZONE: Asia/Tokyo

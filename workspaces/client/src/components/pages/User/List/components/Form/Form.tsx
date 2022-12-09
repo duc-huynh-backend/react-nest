@@ -11,7 +11,6 @@ import {
   userActions,
 } from 'src/stores/reducers/userSlice';
 import {
-  DEFAULT_AUTHORITY_OPTION,
   DEFAULT_USER_AUTHORITY_OPTIONS,
   MESSAGE_BOX_STATUS,
 } from '../../../../../../utils/constants';
@@ -29,7 +28,7 @@ export function SearchForm(props: any) {
 
   const initValueObject = {
     user_name: '',
-    authority: DEFAULT_AUTHORITY_OPTION,
+    authority: '',
   };
 
   // Formik no accept uncontrolled values (Can be undefined or defined)
@@ -63,7 +62,6 @@ export function SearchForm(props: any) {
   const formik = useFormik({
     initialValues: initValueObject,
     onSubmit: (values: any) => {
-      if (values.authority === '') values.authority = DEFAULT_AUTHORITY_OPTION;
       const searchParams = { limit: listLimit, page: listPage };
 
       Object.keys(values).forEach((kw) => {

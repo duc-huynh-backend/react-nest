@@ -9,6 +9,10 @@
       "cache": false,
       "outputMode": "full"
     },
+    "build:prod": {
+      "cache": false,
+      "outputMode": "full"
+    },
     "start:dev": {
       "cache": false,
       "dependsOn": ["build:watch"],

@@ -1,6 +1,8 @@
 import { LoggerService } from './../../../core/providers/logger';
 import { Op } from 'sequelize';
-import { DEFAULT_AUTHORITY, DEFAULT_OFFSET } from './../../../utils/contants';
+import {
+  AUTHORITY, DEFAULT_AUTHORITY, DEFAULT_OFFSET,
+} from './../../../utils/contants';
 import { SearchDTO } from './../dto/search.dto';
 import { isEmpty } from 'lodash';
 import { User } from '@/src/modules/user/entity/user.entity';
@@ -28,25 +30,33 @@ export class UserService extends BaseService {
 
   async findUsers(criteria: SearchDTO) {
     const {
-      user_name, authority = DEFAULT_AUTHORITY, limit, page,
+      user_name, authority, limit, page,
     } = criteria;
 
     const condition = {
-      where: {
-        user_name: { [Op.substring]: user_name.trim() },
-        authority: Number(authority),
-      },
+      where: {},
       pagination: {
         limit: Number(limit),
         offset: (page ? Number(page) - 1 : DEFAULT_OFFSET) * Number(limit),
       },
     };
 
+    if (user_name) Object.assign(condition.where, { user_name: { [Op.substring]: user_name.trim() } });
+    if (authority) Object.assign(condition.where, { authority });
+
     try {
       const { count, rows }: { count: number, rows: User[] } =
-      await this.usersRepository.findAndCountAll(condition.where, condition.pagination);
+        await this.usersRepository.findAndCountAll(condition.where, condition.pagination);
 
-      return { count, rows };
+      // Convert authority value from number to text
+      const refinedRows = rows.map((row) => {
+        return {
+          ...row,
+          authority: AUTHORITY[row.authority],
+        };
+      });
+
+      return { count, rows: refinedRows };
     } catch (error) {
       console.log('======== user.service findUsers', error);
       throw new InternalServerErrorException();

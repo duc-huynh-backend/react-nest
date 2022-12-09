@@ -1,4 +1,4 @@
-import { DELETE_FLG } from '@/src/utils/contants';
+import { DELETE_FLG } from './../../../src/utils/contants';
 
 export const users: any[] = [
   {

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run lint:client:fix
+npm run lint:server:fix
+
+npx lint-staged

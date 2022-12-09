@@ -81,6 +81,6 @@ wait
 
 echo "Done!"
 
-timeOut=3
+timeOut=5
 
 read -r -p "Wait $timeOut seconds or press any key to continue immediately" -t $timeOut -n 1 -s

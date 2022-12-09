@@ -29,4 +29,8 @@ export class UserService extends HttpService {
       id,
     });
   }
+
+  checkEmail(email: string): Promise<any> {
+    return this.get(`${API_URL.USER.CHECK_MAIL}/${email}`);
+  }
 }

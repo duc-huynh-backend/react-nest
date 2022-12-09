@@ -2,7 +2,6 @@ import {
   LOGIN,
   ILoginPayload,
   MESSAGE_BOX_STATUS,
-  MINI_SIDE_BAR,
 } from './../../utils/constants';
 import { sessionService } from './../../services/sessionService';
 import { appActions } from 'src/stores/reducers/appSlice';
@@ -25,7 +24,6 @@ export const logout = createAsyncThunk(
     try {
       sessionService.remove(LOGIN);
       thunkAPI.dispatch(appActions.setAccessToken(''));
-      sessionStorage.removeItem(MINI_SIDE_BAR);
       return true;
     } catch (error: any) {
       thunkAPI.dispatch(

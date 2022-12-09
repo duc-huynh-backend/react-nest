@@ -14,6 +14,7 @@ import {
 import './Form.scss';
 import * as Yup from 'yup';
 import {
+  checkEmail,
   createUser,
   editUser,
   searchDataSelector,
@@ -29,10 +30,18 @@ const EDIT_USER_SUCCESS_TEXT = 'Edit successfully!';
 const EDIT_USER_FAIL_TEXT = 'Edit fail!';
 const REQUIRED_VALIDATION_TEXT = 'This field is required.';
 const INCORRECT_EMAIL_TEXT = 'メールアドレスが間違っています。';
+const EMAIL_EXIST_ERROR_TEXT = 'Trùng email rồi nha ba!';
 
 export function RegistrationForm(props: any) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const FORM_FIELD_NAMES = {
+    user_name: 'user_name',
+    mail_address: 'mail_address',
+    user_password: 'user_password',
+    authority: 'authority',
+  };
 
   const initValueObject = {
     user_name: '',
@@ -66,11 +75,9 @@ export function RegistrationForm(props: any) {
   const userDetail: IUserDetailPayload = props?.userDetail;
 
   useEffect(() => {
-    if (!userDetail) {
-      formik.resetForm();
-    } else {
-      formik.setValues(userDetail);
-    }
+    !userDetail
+      ? formik.resetForm({ values: initValueObject })
+      : formik.setValues(userDetail);
   }, [userDetail]);
 
   const renderAuthorityOptions = (
@@ -162,7 +169,7 @@ export function RegistrationForm(props: any) {
   });
 
   const formik = useFormik({
-    initialValues: initValueObject,
+    initialValues: !userDetail ? initValueObject : userDetail,
     validationSchema: UserRegistrationSchema,
     onSubmit: (values) => {
       userDetail
@@ -184,6 +191,20 @@ export function RegistrationForm(props: any) {
     );
   };
 
+  const handleCheckEmail = (value: string) => {
+    const isValid = !formik.errors.mail_address;
+    if (isValid && value.trim() !== formik.initialValues.mail_address.trim())
+      dispatch(checkEmail(value))
+        .unwrap()
+        .then((res: boolean) => {
+          res &&
+            formik.setFieldError(
+              FORM_FIELD_NAMES.mail_address,
+              EMAIL_EXIST_ERROR_TEXT,
+            );
+        });
+  };
+
   return (
     <form id='form' onSubmit={formik.handleSubmit}>
       <div id='form-input-container'>
@@ -195,11 +216,14 @@ export function RegistrationForm(props: any) {
             </label>
             <input
               id='user-name'
-              name='user_name'
+              name={FORM_FIELD_NAMES.user_name}
               className='form-input'
               placeholder='ユーザー名を入力'
               onChange={(e) => {
-                setIsChangeFields({ ...isChangeFields, user_name: true });
+                setIsChangeFields({
+                  ...isChangeFields,
+                  [FORM_FIELD_NAMES.user_name]: true,
+                });
                 formik.handleChange(e);
               }}
               value={formik.values.user_name}
@@ -217,9 +241,13 @@ export function RegistrationForm(props: any) {
               className='form-input'
               placeholder='ユーザー名を入力'
               onChange={(e) => {
-                setIsChangeFields({ ...isChangeFields, mail_address: true });
+                setIsChangeFields({
+                  ...isChangeFields,
+                  [FORM_FIELD_NAMES.mail_address]: true,
+                });
                 formik.handleChange(e);
               }}
+              onBlur={(e) => handleCheckEmail(e.currentTarget.value)}
               value={formik.values.mail_address}
               autoComplete='off'
             />
@@ -242,7 +270,10 @@ export function RegistrationForm(props: any) {
                 className='form-input'
                 placeholder='ユーザー名を入力'
                 onChange={(e) => {
-                  setIsChangeFields({ ...isChangeFields, user_password: true });
+                  setIsChangeFields({
+                    ...isChangeFields,
+                    [FORM_FIELD_NAMES.user_password]: true,
+                  });
                   formik.handleChange(e);
                 }}
                 value={formik.values.user_password}
@@ -275,7 +306,10 @@ export function RegistrationForm(props: any) {
               className='form-input'
               value={formik.values.authority}
               onChange={(e) => {
-                setIsChangeFields({ ...isChangeFields, authority: true });
+                setIsChangeFields({
+                  ...isChangeFields,
+                  [FORM_FIELD_NAMES.authority]: true,
+                });
                 formik.setFieldValue(e.target.name, e.target.value);
               }}
             >

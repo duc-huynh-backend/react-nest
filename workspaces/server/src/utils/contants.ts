@@ -7,6 +7,11 @@ export enum DELETE_FLG {
   YES,
 }
 
+export enum AUTHORITY {
+  管理者 = 1,
+  一般 = 2,
+}
+
 export const DEFAULT_LIMIT = 20;
 
 export const DEFAULT_OFFSET = 0;

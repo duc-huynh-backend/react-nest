@@ -30,11 +30,11 @@ export class UsersRepository extends BaseRepository<User> {
   }
 
   public async findById(id: ID): Promise<Partial<User>> {
-    return await this.user.findOne({ where: { [this.idField]: id } });
+    return await this.user.findOne({ where: { [this.idField]: id } }) as any;
   }
 
   public async findOne(criteria: Partial<User>): Promise<Partial<User>> {
-    return await this.user.findOne({ where: criteria });
+    return await this.user.findOne({ where: criteria }) as any;
   }
 
   public async create(data: Partial<User>): Promise<User> {

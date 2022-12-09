@@ -15,9 +15,6 @@ export const MESSAGE_BOX_STATUS = {
 
 export const DEFAULT_MESSAGE_STATUS = 'success';
 
-export const MINI_SIDE_BAR = 'MINI_SIDE_BAR';
-export const ACTIVE_SIDE_BAR = 'ACTIVE_SIDE_BAR';
-
 export const MESSAGE_BOX = 'messageBox';
 
 export const DEFAULT_PAGE = 1;
@@ -66,6 +63,7 @@ export const API_URL = {
   },
   USER: {
     PATH: '/users',
+    CHECK_MAIL: '/users/email',
   },
 };
 

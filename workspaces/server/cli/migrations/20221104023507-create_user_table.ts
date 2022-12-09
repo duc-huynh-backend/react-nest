@@ -24,7 +24,7 @@ module.exports = {
     `);
   },
 
-  async down(queryInterface) {
+  async down(queryInterface: QueryInterface) {
     await queryInterface.dropTable(MODEL_NAME.USER);
   },
 };

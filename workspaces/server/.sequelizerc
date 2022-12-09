@@ -1,7 +1,19 @@
 const { resolve } = require('path');
+require('dotenv').config();
+
+const devEnvs = [
+  'development',
+  'test',
+  'staging',
+  'production',
+];
+
+const NODE_ENV = !devEnvs.includes(process.env.NODE_ENV) ? 'development' : process.env.NODE_ENV;
+
+const config = resolve('cli', 'config', NODE_ENV, `database.json`);
 
 module.exports = {
-  config: resolve('cli', 'config', `database.json`),
+  config,
   'models-path': resolve('cli', 'models'),
   'seeders-path': resolve('cli', 'seeders'),
   'migrations-path': resolve('cli', 'migrations'),

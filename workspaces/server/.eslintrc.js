@@ -23,6 +23,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/array-type': 0,
+    '@typescript-eslint/dot-notation': 0,
     '@typescript-eslint/interface-name-prefix': 0,
     '@typescript-eslint/naming-convention': 0,
     '@typescript-eslint/no-extraneous-class': 0,

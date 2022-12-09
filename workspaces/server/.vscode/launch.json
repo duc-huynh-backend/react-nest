@@ -19,7 +19,7 @@
       ],
       "console": "internalConsole",
       "env": {
-        "NODE_ENV": "DEBUG"
+        "NODE_ENV": "development"
       }
     }
   ]
